@@ -2,6 +2,8 @@ package br.com.caelum.agiletickets.models;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
@@ -97,8 +100,36 @@ public class Espetaculo {
      * Repare que a data da primeira sessao é sempre a data inicial.
      */
 	public List<Sessao> criaSessoes(LocalDate inicio, LocalDate fim, LocalTime horario, Periodicidade periodicidade) {
-		// ALUNO: Não apague esse metodo. Esse sim será usado no futuro! ;)
-		return null;
+		// ALUNnO: Não apague esse metodo. Esse sim será usado no futuro! ;)
+		long dia_inicio = inicio.getDayOfYear();
+		long dia_fim = inicio.getDayOfYear();
+		long dif = dia_fim - dia_inicio;
+		
+		long num;
+		Integer duracao;
+		
+		if (periodicidade.equals(periodicidade.DIARIA))
+		{num = dif;
+		 duracao = 1000;
+		}
+		else{
+			num = dif % 7;
+			duracao = 7000;
+		}
+		
+		List<Sessao> lista = new ArrayList<Sessao>();
+		
+		for(int i=0;i<num;++i){
+			if (periodicidade.equals(periodicidade.DIARIA))
+			inicio = inicio.plusDays(i);
+			else 
+				inicio = inicio.plusDays(i*7);
+			Sessao sessao = new Sessao();
+			sessao.setInicio(new DateTime(inicio));
+			sessao.setDuracaoEmMinutos(duracao);
+			lista.add(sessao);
+		}
+		return lista;
 	}
 	
 	public boolean Vagas(int qtd, int min)

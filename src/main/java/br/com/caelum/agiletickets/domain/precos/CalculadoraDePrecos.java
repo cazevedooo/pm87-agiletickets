@@ -44,5 +44,31 @@ public class CalculadoraDePrecos {
 
 		return preco.multiply(BigDecimal.valueOf(quantidade));
 	}
+	
+	public static BigDecimal calculaRefact(Sessao sessao, Integer quantidade) {
+		BigDecimal preco;
+		
+		double CONSTANTE_CINEMA = 0.10;
+		double CONSTANTE_BALE = 0.20;
+		
+		preco = sessao.getPreco();
+		
+		if(sessao.getEspetaculo().getTipo().equals(TipoDeEspetaculo.CINEMA) || sessao.getEspetaculo().getTipo().equals(TipoDeEspetaculo.SHOW) || sessao.getEspetaculo().getTipo().equals(TipoDeEspetaculo.BALLET) || sessao.getEspetaculo().getTipo().equals(TipoDeEspetaculo.ORQUESTRA)) {
+			//quando estiver acabando os ingressos... 
+			if((sessao.getTotalIngressos() - sessao.getIngressosReservados()) / sessao.getTotalIngressos().doubleValue() <= 0.05)  {
+				
+				if(sessao.getEspetaculo().getTipo().equals(TipoDeEspetaculo.CINEMA) || sessao.getEspetaculo().getTipo().equals(TipoDeEspetaculo.SHOW)) 
+				preco = sessao.getPreco().add(sessao.getPreco().multiply(BigDecimal.valueOf(CONSTANTE_CINEMA)));		 
+				
+			if 	(sessao.getEspetaculo().getTipo().equals(TipoDeEspetaculo.BALLET) || sessao.getEspetaculo().getTipo().equals(TipoDeEspetaculo.ORQUESTRA)){
+				preco = sessao.getPreco().add(sessao.getPreco().multiply(BigDecimal.valueOf(CONSTANTE_BALE)));
+				if(sessao.getDuracaoEmMinutos() > 60)
+					preco = preco.add(sessao.getPreco().multiply(BigDecimal.valueOf(0.10)));
+			}
+		}
+		}	
+		return preco.multiply(BigDecimal.valueOf(quantidade));
+	}
+	
 
 }

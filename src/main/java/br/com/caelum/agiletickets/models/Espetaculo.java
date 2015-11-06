@@ -114,8 +114,37 @@ public class Espetaculo {
 		DateTime dataInicio = inicio.toDateTimeAtCurrentTime();
 		for ( int i = 0; i <= qtdSessoes; i++ ) {
 			Sessao novaSessao = new Sessao();
+			novaSessao.setEspetaculo(this);
 			novaSessao.setInicio(dataInicio);
 			dataInicio = dataInicio.plusDays(plusDays);
+			sessoes.add(novaSessao);
+		}
+		return sessoes;
+	}
+	
+	public List<Sessao> criaSessoesTDD(LocalDate inicio, LocalDate fim, LocalTime horario, Periodicidade periodicidade) {
+
+		List<Sessao> sessoes = new ArrayList<Sessao>();
+		int plusDays = 1;
+		int qtdSessoes = 0;
+		
+		if (inicio.isAfter(fim)||inicio.isBefore(new LocalDate())) return sessoes;
+		
+		if (Periodicidade.DIARIA.equals(periodicidade))
+		{
+			plusDays = 1;
+			qtdSessoes = fim.getDayOfYear() - inicio.getDayOfYear();
+		}
+		else if ( Periodicidade.SEMANAL.equals(periodicidade) ) {
+			plusDays = 7;
+			qtdSessoes = (fim.getDayOfYear() - inicio.getDayOfYear()) / plusDays;
+		}
+		
+		//DateTime dataInicio = inicio.toDateTimeAtCurrentTime();
+		for ( int i = 0; i <= qtdSessoes; i++ ) {
+			Sessao novaSessao = new Sessao();
+			novaSessao.setEspetaculo(this);
+			novaSessao.setInicio(inicio.plusDays(plusDays).toDateTime(horario));
 			sessoes.add(novaSessao);
 		}
 		return sessoes;
